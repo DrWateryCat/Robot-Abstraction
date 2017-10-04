@@ -6,7 +6,7 @@ class Gearbox:
     WHEEL_DIAMETER = 6
     WHEEL_CORRECTION = 0
 
-    def __init__(self, motor_controllers):
+    def __init__(self, motor_controllers, pid_values=[0, 0, 0, 0], reversed=False):
         self.throttle = 0
 
         self.master_talon = ctre.CANTalon(motor_controllers[0])
@@ -17,6 +17,23 @@ class Gearbox:
             slave.set(self.master_talon.getDeviceID())
 
             self.slave_talons.append(slave)
+
+        #Index 0 should be P
+        #Indes 1 should be I
+        #Index 2 should be D
+        #Index 3 should be F
+
+        self.master_talon.setProfile(0)
+        self.master_talon.setP(pid_values[0])
+        self.master_talon.setI(pid_values[1])
+        self.master_talon.setD(pid_values[2])
+        self.master_talon.setF(pid_values[3])
+
+        self.master_talon.setFeedbackDevice(ctre.CANTalon.FeedbackDevice.QuadEncoder)
+        
+        self.master_talon.reverseOutput(True if reversed else False)
+        self.master_talon.reverseSensor(True if reversed else False)
+
 
     def revolutions_to_inches(self, revs):
         return revs * (self.WHEEL_DIAMETER * math.pi) #+ self.WHEEL_CORRECTION
