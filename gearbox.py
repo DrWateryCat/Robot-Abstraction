@@ -59,7 +59,7 @@ class Gearbox:
 
     def set_rpm(self, rpm):
         self.master_talon.changeControlMode(ctre.CANTalon.ControlMode.Speed)
-        self.master_talon.set(self.rpm_to_native(rpm))
+        self.master_talon.set(rpm)
 
     def set_inches_per_second(self, ips):
         self.set_rpm(self.inches_per_second_to_rpm(ips))
