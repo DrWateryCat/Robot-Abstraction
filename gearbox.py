@@ -34,6 +34,16 @@ class Gearbox:
         self.master_talon.reverseOutput(True if reversed else False)
         self.master_talon.reverseSensor(True if reversed else False)
 
+        """
+        self.pid_controller = wpilib.PIDController(pid_values[0], pid_values[1], pid_values[2], self.master_talon.getEncVelocity, self.master_talon.set)
+        self.pid_controller.setContinuous(True)
+
+        self.pid_controller.setInputRange(-1440, 1440)
+        self.pid_controller.setOutputRange(-1, 1)
+        """
+
+        #self.master_talon.configEncoderCodesPerRev(1440)
+
 
     def revolutions_to_inches(self, revs):
         return revs * (self.WHEEL_DIAMETER * math.pi) #+ self.WHEEL_CORRECTION
@@ -45,11 +55,14 @@ class Gearbox:
         return self.revolutions_to_inches(rpm) / 60
 
     def inches_per_second_to_rpm(self, ips):
-        return self.inches_to_revolutions(ips) * 6
+        return self.inches_to_revolutions(ips) * 60
 
     #Talons want velocity data in position change / 10ms
     def rpm_to_native(self, rpm):
         return rpm / 6000
+
+    def native_to_rpm(self, native):
+        return native * 6000
 
     def set_throttle(self, val):
         self.throttle = val
@@ -63,3 +76,7 @@ class Gearbox:
 
     def set_inches_per_second(self, ips):
         self.set_rpm(self.inches_per_second_to_rpm(ips))
+
+    def reset(self):
+        #self.master_talon.setEncPosition(0)
+        self.master_talon.reset()

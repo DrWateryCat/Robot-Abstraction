@@ -9,6 +9,9 @@ class Robot(magicbot.MagicRobot):
         self.left_joystick = wpilib.Joystick(0)
         self.right_joystick = wpilib.Joystick(1)
 
+    def teleopInit(self):
+        self.drive_system.reset()
+
     def teleopPeriodic(self):
         data = (self.left_joystick.getRawAxis(1), self.right_joystick.getRawAxis(1))
 

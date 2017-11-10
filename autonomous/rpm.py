@@ -6,6 +6,7 @@ class RPM(StatefulAutonomous):
     drive_system = drive.Drive
 
     def initialize(self):
+        #self.drive_system.reset()
         pass
 
     @timed_state(duration=3, next_state='second_stage', first=True)
